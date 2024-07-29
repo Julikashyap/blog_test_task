@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="blog-post">
+        <h2 class="blog-post-title">{{ page_obj.title }}</h2>
+        <p class="blog-post-meta">{{ page_obj.created_at }} by <a href="#">{{ page_obj.user.name }}</a></p>
+
+        <form method="post" action="/share_bog">
+            {% csrf_token %}
+            <input type="email" name="email" placeholder="Email " required>
+            <input type="hidden" name="id" value="{{page_obj.id}}">
+            <button type="submit">Share</button>
+        </form>
+        <img class="card-img-right flex-auto d-none d-md-block" style="width: 300px; height: 280px;" src="https://picsum.photos/200/300" alt="Card image cap">
+        <p>{{ page_obj.content }}</p>
+    </div>
+    <div class="comments">
+        <h3>Comments</h3>
+        {% for comment in comments %}
+            <div class="comment">
+                <p><strong>{{ comment.user.name }}</strong> on {{ comment.created_at }}</p>
+                <p>{{ comment.comment }}</p>
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+    
+    <div class="comment-form">
+        <h3>Add a comment</h3>
+        <form method="post">
+            {% csrf_token %}
+            <label for="text"  style="display: block; margin-bottom: 5px;">Comment:</label>
+            <textarea id="text" name="text" rows="2" required></textarea><br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
